@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Activos TI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Login -->
+  <section id="login-view" class="center hidden">
+    <form id="login-form" class="card narrow">
+      <h1>Activos TI</h1>
+      <p class="muted">Inicia sesion para continuar</p>
+      <label>Usuario <input name="username" autocomplete="username" required maxlength="50"></label>
+      <label>Contrasena <input name="password" type="password" autocomplete="current-password" required maxlength="128"></label>
+      <p id="login-error" class="error" role="alert"></p>
+      <button type="submit">Entrar</button>
+    </form>
+  </section>
+
+  <!-- App -->
+  <section id="app-view" class="hidden">
+    <header class="topbar">
+      <strong>Activos TI</strong>
+      <span class="spacer"></span>
+      <span id="who" class="muted"></span>
+      <button id="logout" class="secondary">Salir</button>
+    </header>
+
+    <main>
+      <form id="filters" class="toolbar">
+        <input name="search" placeholder="Buscar codigo, serie, marca, modelo" maxlength="100">
+        <select name="status">
+          <option value="">Todos los estados</option>
+          <option>Disponible</option><option>Asignado</option><option>Mantenimiento</option><option>Retirado</option>
+        </select>
+        <input name="category" placeholder="Categoria (ej. Laptop)" maxlength="50">
+        <button type="submit">Filtrar</button>
+        <span class="spacer"></span>
+        <button type="button" id="new-asset" class="admin-only">+ Nuevo activo</button>
+      </form>
+
+      <p id="list-error" class="error" role="alert"></p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Codigo</th><th>Serie</th><th>Categoria</th><th>Marca / Modelo</th><th>Tipo</th><th>Estado</th><th>Ubicacion</th><th>Asignado a</th><th></th></tr>
+          </thead>
+          <tbody id="assets"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <button id="prev" class="secondary">Anterior</button>
+        <span id="page-info" class="muted"></span>
+        <button id="next" class="secondary">Siguiente</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- Dialogos -->
+  <dialog id="asset-dialog">
+    <form id="asset-form" method="dialog" class="grid">
+      <h2>Nuevo activo</h2>
+      <label>Codigo* <input name="assetCode" required maxlength="30" placeholder="TI-0001003"></label>
+      <label>Numero de serie <input name="serialNumber" maxlength="80"></label>
+      <label>Categoria* <input name="category" required maxlength="50" placeholder="Laptop"></label>
+      <label>Marca* <input name="brand" required maxlength="80"></label>
+      <label>Modelo* <input name="model" required maxlength="80"></label>
+      <label>Tipo*
+        <select name="ownershipType"><option>Propio</option><option>Arrendado</option></select>
+      </label>
+      <label>Proveedor <select name="supplierId"><option value="">(ninguno)</option></select></label>
+      <label>Ubicacion* <input name="currentLocation" required maxlength="150"></label>
+      <label>Fecha de compra <input name="purchaseDate" type="date"></label>
+      <label>Fin de arrendamiento <input name="rentalEndDate" type="date"></label>
+      <label class="full">Observaciones <input name="notes" maxlength="500"></label>
+      <p class="error full" role="alert"></p>
+      <div class="actions full">
+        <button type="button" class="secondary" data-close>Cancelar</button>
+        <button type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="assign-dialog">
+    <form id="assign-form" method="dialog">
+      <h2>Asignar <span data-asset-code></span></h2>
+      <label>Colaborador* <select name="employeeId" required></select></label>
+      <label>Observaciones <input name="notes" maxlength="500"></label>
+      <p class="error" role="alert"></p>
+      <div class="actions">
+        <button type="button" class="secondary" data-close>Cancelar</button>
+        <button type="submit">Asignar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="return-dialog">
+    <form id="return-form" method="dialog">
+      <h2>Devolver <span data-asset-code></span></h2>
+      <label>Condicion*
+        <select name="condition"><option>Bueno</option><option>Regular</option><option value="Danado">Dañado</option></select>
+      </label>
+      <label>Observaciones <input name="notes" maxlength="500"></label>
+      <p class="error" role="alert"></p>
+      <div class="actions">
+        <button type="button" class="secondary" data-close>Cancelar</button>
+        <button type="submit">Registrar devolucion</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="history-dialog">
+    <h2>Historial <span data-asset-code></span></h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Fecha</th><th>Movimiento</th><th>Detalle</th><th>Usuario</th><th>Observaciones</th></tr></thead>
+        <tbody id="history"></tbody>
+      </table>
+    </div>
+    <div class="actions"><button type="button" data-close>Cerrar</button></div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
